@@ -67,7 +67,7 @@ class Htaccess {
     parse_str( $_POST["formdata"], $htacces_para_array );
     $passowrd = md5( $htacces_para_array['password'] );
     $htaccess_message  = "<p>Add these lines to your .htaccess file<br><br><code>";
-    $htaccess_message .= "AuthName {$htacces_para_array['header']}<br>";
+    $htaccess_message .= "AuthName \"{$htacces_para_array['header']}\"<br>";
     $htaccess_message .= "AuthUserFile {$htacces_para_array['path']}<br>";
     $htaccess_message .= "Require valid-user<br>";
     $htaccess_message .= "AuthType Basic<br>";
