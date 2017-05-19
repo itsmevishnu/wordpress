@@ -14,19 +14,17 @@
 
 defined( 'ABSPATH' ) or die( "Don't play with me, I am a plugin");
 
-class Htaccess extends WP_Widget {
-  public function __construct(){
-      parent::__construct( 'htaccess-widget', '.htaccess Modifier', array(
-        'classname' => 'htaccess',
-			  'description' => 'Widget to create .htpasswd for your server',
-      ) );
+require_once( plugin_dir_path( __FILE__ ) . 'inc/traits/htpasswd-trait.php');
+require_once( plugin_dir_path( __FILE__ ) . 'inc/classes/htpasswd-widget.php');
 
-     add_action( 'admin_menu', array( $this, 'htaccess_main_menu' ) );
-     add_shortcode( 'htpasswd', array( $this, 'htaccess_shortcode' ) );
-     add_action( 'wp_enqueue_scripts', array( $this, 'htaccess_load_js_css' ) );
-     add_action( 'wp_ajax_nopriv_htaccess_ajax_submit', array( $this, 'htaccess_ajax_submit' ) );
-     add_action( 'wp_ajax_htaccess_ajax_submit', array( $this, 'htaccess_ajax_submit' ) );
-     add_action( 'widgets_init', array( $this, 'htaccess_register_widget' ) );
+class Htaccess {
+  use HtpasswdTrait;
+  public function __construct(){
+    add_action( 'admin_menu', array( $this, 'htaccess_main_menu' ) );
+    add_shortcode( 'htpasswd', array( $this, 'htaccess_shortcode' ) );
+    add_action( 'wp_enqueue_scripts', array( $this, 'htaccess_load_js_css' ) );
+    add_action( 'wp_ajax_nopriv_htaccess_ajax_submit', array( $this, 'htaccess_ajax_submit' ) );
+    add_action( 'wp_ajax_htaccess_ajax_submit', array( $this, 'htaccess_ajax_submit' ) );
   }
 
   /**
@@ -36,7 +34,7 @@ class Htaccess extends WP_Widget {
   public function htaccess_main_menu() {
 
     add_menu_page( '.htpasswd Generator', //title of the page
-     'HTACCESS', //label for the menu
+     '.htpasswd Generator', //label for the menu
      'list_users',// permission for the menu
      'htaccess-help', // slug name for the menu page.
      array($this, 'htaccess_display_page' ) , //call back function
@@ -54,73 +52,6 @@ class Htaccess extends WP_Widget {
     _e( 'Please use [htpasswd] shotcode to display the form in anywhere you like or use our widget inside your sidebar', 'vj-htaccess' );
   }
 
-/**
- * Display the form when shortcode included.
- * @return {[type] [description]
- */
-
-  public function htaccess_shortcode() {
-   $form =  '<form class="form-horizontal" method="post" action="">
-      <fieldset>
-
-      <!-- Form Name -->
-      <legend>' . __( '.htpasswd Generator', 'vj-htaccess' ) . '</legend>
-
-      <!-- Text input-->
-      <div class="form-group">
-        <label class="col-md-12 control-label" for="header">' . __( 'Header', 'vj-htaccess' ) . '</label>
-        <div class="col-md-12">
-        <input id="header" name="header" type="text" placeholder="' . __( 'Header text', 'vj-htaccess' ) . '" class="form-control input-md" required="required">
-        <span class="help-block"> ' . __( 'Header text', 'vj-htaccess' ) . ' </span>
-        </div>
-      </div>
-
-      <!-- Text input-->
-      <div class="form-group">
-        <label class="col-md-12 control-label" for="path">' . __( 'Path', 'vj-htaccess' ) . '</label>
-        <div class="col-md-12">
-        <input id="path" name="path" type="text" placeholder=" ' .__( 'Path of the .htpasswd', 'vj-htaccess' ) . ' " class="form-control input-md" required="required">
-        <span class="help-block">' . __( 'Enter the path of the .htpasswd file', 'vj-htaccess' ) . '</span>
-        </div>
-      </div>
-
-      <!-- Text input-->
-      <div class="form-group">
-        <label class="col-md-12 control-label" for="username">' .__( 'Username', 'vj-htaccess' ) . '</label>
-        <div class="col-md-12">
-        <input id="username" name="username" type="text" placeholder="' .__( 'Username', 'vj-htaccess' ) . '" class="form-control input-md" required="required">
-        <span class="help-block">' . __( 'Enter the username', 'vj-htaccess' ) . '</span>
-        </div>
-      </div>
-
-      <!-- Password input-->
-      <div class="form-group">
-        <label class="col-md-12 control-label" for="password">' . __( 'Password', 'vj-htaccess' ) . '</label>
-        <div class="col-md-12">
-          <input id="password" name="password" type="password" placeholder="' . __( 'Password', 'vj-htaccess' ) . '" class="form-control input-md" required="required">
-          <span class="help-block">' . __( 'Enter the password', 'vj-htaccess' ) . '</span>
-        </div>
-      </div>
-
-      <!-- Button -->
-      <div class="form-group">
-        <label class="col-md-12 control-label" for="submit"></label>
-        <div class="col-md-12">
-          <input type="submit" id="submit" name="submit" class="btn btn-primary">
-          <input type="reset" id="reset" name="submit" class="btn btn-primary">
-        </div>
-      </div>
-
-      <!-- Textarea -->
-      <div id="result">
-
-      </div>
-
-      </fieldset>
-      </form>
-      ';
-    return $form;
-  }
 
   /**
  * Include the js and css files
@@ -147,38 +78,8 @@ class Htaccess extends WP_Widget {
     $htaccess_message .= "</code></p>";
     wp_send_json( $htaccess_message );
   }
-
-  /**
-   * Creating a widge
-   */
-
-  public function widget( $args, $instance ) {
-    echo $args['before_widget'];
-    if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
-		}
-    echo $this->htaccess_shortcode();
-    echo $args['after_widget'];
-  }
-  /**backend widget form*/
-  public function form( $instance ) {
-		$title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'New title', 'text_domain' );
-
-		echo '<p>';
-		echo "<label for= " .  esc_attr( $this->get_field_id( 'title' ) )  . " > ".  esc_attr_e( 'Title:', 'text_domain' ) . "</label>";
-		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value=" ' . esc_attr( $title ). '">';
-		echo '</p>';
-	}
-  public function update( $new_instance, $old_instance ) {
-		$instance = array();
-		$instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-
-		return $instance;
-	}
-  public function htaccess_register_widget() {
-    register_widget( get_class( $this ) );
-}
-
 }
 
 new Htaccess();
+
+new HtpasswdWidget();
