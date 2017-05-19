@@ -163,12 +163,11 @@ class Htaccess extends WP_Widget {
   /**backend widget form*/
   public function form( $instance ) {
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : esc_html__( 'New title', 'text_domain' );
-		?>
-		<p>
-		<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_attr_e( 'Title:', 'text_domain' ); ?></label>
-		<input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
-		</p>
-		<?php
+
+		echo '<p>';
+		echo "<label for= " .  esc_attr( $this->get_field_id( 'title' ) )  . " > ".  esc_attr_e( 'Title:', 'text_domain' ) . "</label>";
+		echo '<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value=" ' . esc_attr( $title ). '">';
+		echo '</p>';
 	}
   public function update( $new_instance, $old_instance ) {
 		$instance = array();
