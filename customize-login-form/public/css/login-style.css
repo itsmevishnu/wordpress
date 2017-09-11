@@ -1,0 +1,59 @@
+body.login {
+        background-image: url('/wordpress/testwp/wp-content/uploads/2017/06/IMG_20170506_100512_edit.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+      }
+.login label {
+      font-size: 12px;
+      color: #000000;
+      font-family:verdana,geneva,sans-serif
+    }
+p#nav {
+          display: none;
+        }
+p#backtoblog {
+        display: none;
+      }
+.login h1 a {
+      background-image: url('/wordpress/testwp/wp-content/uploads/2017/05/icon-256x256.png');
+    }
+.login input[type='text'],.login input[type='password']{
+        background-color: #a5a5a5;
+        color:#828282;
+        border-color:#FF3300;
+       -webkit-border-radius: 4px;
+    }
+.login form{
+        margin:0px,0px;
+        position: relative;
+        padding: 26px 24px 46px;
+        font-weight: 400;
+        overflow: auto;
+        background-color:#56d845;
+        border-style: dotted;
+        border-color: dotted;
+      }
+.login .button-primary{
+        background:#8e3008;
+        border-color:#8e3008;
+        color:#65d615;
+      }
+
+    .login .button-primary:hover {
+        background:#b5b5b5;
+        border-color:#b5b5b5;
+        color:#65d615;
+      }
+.login #login_error, .login .message {
+        border-color: #dd9933;
+        border-style: double;
+        background-color:#15ea26;
+        color:#1bc174;
+      }
+#login{
+      margin-top: 120px;
+      margin-right: 100px;
+      margin-bottom: 10px;
+      margin-left: 10px;
+    }
