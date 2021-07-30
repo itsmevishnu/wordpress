@@ -161,7 +161,8 @@ function mme_send_mail(){
     $totalamount = floatval( preg_replace( '#[^\d.]#', '', $woocommerce->cart->get_cart_total() ) );
     $msg .= "\n------------------------------------------------------------\n";
     $msg .= "Total amount\t:".$totalamount;
-	  $to   = explode( ',', get_option( 'custom_emails' ) );
-	  $subject = "Acknowledgement";
-	  wp_mail( $to, $subject, $msg );
+    $to   = explode( ',', get_option( 'custom_emails' ) );
+    $subject = "Acknowledgement";
+    wp_mail( $to, $subject, $msg );
 }
+
