@@ -1,6 +1,6 @@
 # Wordpress plugins
-
-This contain many useful quick plugin with minimum codes and leas bugs.
+The list of plugins created for solving some of the issues faced.
+This contain many useful quick plugin with minimum codes and no bugs.
 
 1. **Themeoptions** : This plugin give you some basic themeoption settings, whichbis very useful when you try to create a new theme/ child theme
 2. **Customize login form**: This plugin help you to change the layout of your entire wp admin login page, you can give a new look to the login page.
